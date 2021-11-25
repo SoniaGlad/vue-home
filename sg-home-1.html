@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home 1</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/vue"></script>
+
+    <style>
+        .container {
+            margin-top: 25px;
+        }
+
+        form,
+        .success {
+            width: 350px;
+            margin: 0 auto;
+        }
+
+        form div {
+            margin-bottom: 10px;
+        }
+
+        .attention {
+            color: red;
+            font-weight: bold;
+        }
+
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" class="container">
+
+        <!-- 
+        
+        Задача 1
+
+        1. Создать форму для авторизации в системе 
+        (ввод логина и пароля):  поле ввода  "Логин", поле ввода "Пароль", и кнопка "Вход" 
+
+        2. При нажатии на кнопку "Вход" необходимо вывести 
+        сообщение об ошибке, если логин и пароль не заполнен 
+        (формат вывода сообщения на ваше усмотрение). 
+
+        3. Если логин и пароль заполнен - вывести сообщение о успешной авторизации в системе в формате: 
+        "Выполнен успешный вход в систему (<введенный логин>)! "
+
+        4. Поля ввода и кнопка Вход в случае успешного входа должны быть "скрыты" (удалены из формы) 
+        
+        -->
+
+        <form v-if="visible" action="#" method="post" @submit="checkForm">
+
+            <div class="input-group mb-3">
+                <label for="log">Login</label>
+                <input v-model="form.login" type="text" id="log" name="login" class="form-control"
+                    placeholder="your login">
+            </div>
+
+            <div>
+                <label for="pass">Password</label>
+                <input v-model="form.password" type="password" id="pass" name="password" class="form-control"
+                    placeholder="your password">
+            </div>
+
+            <div v-if="errors.length">
+                <p class="attention">{{attention}}</p>
+                <ol>
+                    <li v-for="error in errors">{{error}}</li>
+                </ol>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Enter</button>
+
+        </form>
+
+        <div v-else class="success">
+            {{message}} {{form.login}}!
+        </div>
+
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                form: {
+                    login: '',
+                    password: '',
+                },
+                message: 'Выполнен успешный вход в систему,',
+                attention: 'Пожалуйста, заполните необходимые поля формы:',
+                errors: [],
+                visible: true,
+            },
+            methods: {
+                checkForm: function (event) {
+                    event.preventDefault();
+
+                    if (this.form.login && this.form.password) {
+                        this.visible = !this.visible;
+                    }
+
+                    this.errors = [];
+
+                    if (!this.form.login) {
+                        this.errors.push('поле Login не заполнено!');
+                    }
+
+                    if (!this.form.password) {
+                        this.errors.push('поле Password не заполнено!');
+                    }
+                },
+            }
+        })
+    </script>
+</body>
+
+</html>

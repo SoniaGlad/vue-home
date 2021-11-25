@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home 3</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/vue"></script>
+
+    <style>
+        .container {
+            margin-top: 25px;
+        }
+
+        form,
+        .success {
+            width: 350px;
+            margin: 0 auto 15px;
+        }
+
+        form div {
+            margin-bottom: 10px;
+        }
+
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+
+        .attention {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" class="container">
+
+        <!-- 
+        
+        Задача 3
+
+        Создать форму для конвертации из градусов фаренгейта в градусы цельсия.
+        Форма должна содержать поле ввода для ввода числового значения в градусах фаренгейта.
+
+        Формула: С = (F - 32) / 1.8, где F - значение в градусах фаренгейта.
+
+        Результат вычисления должен отображаться в форме после ввода данных и нажатия на кнопку "ОК"
+                
+        -->
+
+        <form action="#" method="post" @submit="showCalc">
+
+            <div class="input-group mb-3">
+                <label for="inputData">Введите t по Фаренгейту:</label>
+                <input v-model="form.inputData" type="text" id="inputData" name="inputData" class="form-control"
+                    placeholder="введите число">
+            </div>
+
+            <button type="submit" class="btn btn-primary">OK</button>
+
+        </form>
+
+        <div v-if="visible" class="success" :class="{'attention': color}">
+            {{message}} {{calc}}
+        </div>
+
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                form: {
+                    inputData: null,
+                },
+                message: 't по Цельсию:',
+                visible: false,
+                color: false,
+            },
+            computed: {
+                calc: function (event) {
+                    console.log('invoked');
+
+                    if (this.form.inputData !== null) {
+                        return ((this.form.inputData - 32) / 1.8).toFixed(2);
+                    } else {
+                        this.color = true;
+                        this.message = 'Введите число!';
+                    }
+                },
+            },
+            methods: {
+                showCalc: function (event) {
+                    event.preventDefault();
+                    this.visible = true;
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

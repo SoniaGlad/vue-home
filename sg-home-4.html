@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home 4</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/vue"></script>
+
+    <style>
+        body {
+            background: #20262E;
+            padding: 20px;
+            font-family: Helvetica;
+        }
+
+        #app {
+            background: #fff;
+            border-radius: 4px;
+            padding: 20px;
+            transition: all 0.2s;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        h2,
+        .completed {
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        del {
+            color: rgba(0, 0, 0, 0.3);
+        }
+
+        form div,
+        .btn {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" class="container">
+
+        <!-- 
+        
+        Задача 4
+
+        Доделать стандартный пример 
+        (https://jsfiddle.net/boilerplate/vue).
+
+        Дать возможность создавать новые задачи (поля название и статус).
+
+        После добавления задача должна отображаться в списке задач. 
+
+        Вывести в форму количество выполненных задач.
+                
+        -->
+
+        <h2>Todos:</h2>
+        <ol>
+            <li v-for="todo in todos">
+                <label>
+                    <input type="checkbox" @change="toggle(todo)" :checked="todo.done">
+
+                    <del v-if="todo.done">
+                        {{ todo.text }}
+                    </del>
+                    <span v-else>
+                        {{ todo.text }}
+                    </span>
+                </label>
+            </li>
+        </ol>
+
+        <form action="#" method="post" @submit="addTask">
+
+            <div class="input-group mb-3">
+                <label for="name">New task</label>
+                <input v-model="name" type="text" id="name" name="name" class="form-control">
+            </div>
+
+            <button type="submit" class="btn btn-success">Add task</button>
+
+            <div class="completed">
+                Tasks completed: <span>{{counter}}</span>
+            </div>
+
+        </form>
+
+    </div>
+
+    <script>
+        new Vue({
+            el: "#app",
+            data: {
+                name: '',
+                counter: 0,
+                todos: [{
+                        text: "Learn JavaScript",
+                        done: false
+                    },
+                    {
+                        text: "Learn Vue",
+                        done: false
+                    },
+                    {
+                        text: "Play around in JSFiddle",
+                        done: false
+                    },
+                    {
+                        text: "Build something awesome",
+                        done: false
+                    }
+                ]
+            },
+            methods: {
+                toggle: function (todo) {
+                    todo.done = !todo.done;
+
+                    (todo.done) ? this.counter++ : this.counter--;
+                },
+                addTask(event) {
+                    event.preventDefault();
+
+                    this.todos.push({
+                        text: this.name,
+                        done: false,
+                    });
+
+                    this.name = '';
+                },
+            },
+        })
+    </script>
+</body>
+
+</html>

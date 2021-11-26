@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 7 - Props</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/vue"></script>
+
+    <style>
+        .container {
+            width: 450px;
+            margin-top: 25px;
+        }
+
+        form {
+            margin: 0 auto 25px;
+        }
+
+        form div {
+            margin-bottom: 10px;
+        }
+
+        form img {
+            width: 450px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 
+        Задача на Уроке: 
+
+        Создать компонент для формы login и password.
+        
+        Компонент должен использовать props для того чтобы установить заголовок 
+        и изображение (логотип).
+
+    -->
+
+    <!-- container for rendering -->
+    <div class="container" id="app">
+        <!-- передаю в компонент form-props данные из родителя с помощью атрибутов -->
+        <testing :title_prop="title" :img_prop="img"></testing>
+    </div>
+
+    <!-- component template -->
+    <template id="form-props">
+
+        <form action="#" method="post" @submit.prevent>
+
+            <!-- <h3 v-model="title_prop"></h3> -->
+            <h3>{{title_prop}}</h3>
+
+            <img :src="img_prop" alt="Ford Mustang Mach 1 (1972)">
+
+            <div>
+                <label for="log">Login</label>
+                <input v-model="form_login" type="text" id="log" name="login" class="form-control">
+            </div>
+
+            <div>
+                <label for="pass">Password</label>
+                <input v-model="form_password" type="password" id="pass" name="password" class="form-control">
+            </div>
+
+        </form>
+
+    </template>
+
+    <script>
+        // компонент формы
+        Vue.component('testing', {
+            template: '#form-props',
+            props: {
+                title_prop: {
+                    type: String,
+                },
+                img_prop: {
+                    type: String,
+                },
+                form: {
+                    login: '',
+                    password: '',
+                }
+            },
+            data() {
+                /* return {
+                    login: '',
+                    password: ''
+                } */
+                return {
+                    form_login: this.form.login,
+                    form_password: this.form.password,
+                }
+            },
+            methods: {},
+        });
+
+        // корневой экземпляр 
+        let app = new Vue({
+            el: "#app",
+            data: {
+                title: 'Ford Mustang Mach 1 (1972)', // этот title я передаю через title_prop
+                img: 'https://images.unsplash.com/photo-1584345604486-0b57b3b99fe9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80', // этот img я передаю через img_prop
+            },
+            methods: {}
+        })
+    </script>

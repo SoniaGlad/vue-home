@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home 6</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/vue"></script>
+
+    <style>
+        .container {
+            margin-top: 25px;
+        }
+
+        form {
+            width: 250px;
+            margin: 0 auto 25px;
+        }
+
+        form div {
+            margin-bottom: 10px;
+        }
+
+        .table {
+            width: 450px;
+            margin: 0 auto 25px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 
+
+        Задача 6
+
+        Создать компонент "ulist" для вывода таблицы из Задачи 2.
+
+        Компонент должен использовать "props"-ы для получения названий колонок и данных таблицы компаний.
+                
+    -->
+
+
+    <!-- container for rendering -->
+    <div id="app" class="container">
+        <!-- component ulist -->
+        <ulist :titles="titles" :companies="companies"></ulist>
+    </div>
+
+    <!-- ulist component template -->
+    <template id="list">
+        <div>
+            <form action="#" method="post" @submit="addCompany" @submit.prevent>
+                <div class="input-group mb-3">
+                    <label for="name">Название компании</label>
+                    <input v-model="name" type="text" id="name" name="name" class="form-control">
+                </div>
+
+                <div class="input-group mb-3">
+                    <label for="inn">ИНН</label>
+                    <input v-model="inn" type="text" id="inn" name="inn" class="form-control">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Добавить</button>
+            </form>
+
+            <table class="table">
+                <tr v-for="title in titles">
+                    <th scope="col">{{title.id}}</th>
+                    <th scope="col">{{title.name}}</th>
+                    <th scope="col">{{title.inn}}</th>
+                </tr>
+                <tr v-for="(company, index) in companies">
+                    <td>{{index + 1}}</td>
+                    <td>{{company.name}}</td>
+                    <td>{{company.inn}}</td>
+                </tr>
+            </table>
+        </div>
+    </template>
+
+    <script>
+        // vue ulist component
+        Vue.component('ulist', {
+            template: '#list',
+            props: {
+                titles: {
+                    type: Array
+                },
+                companies: {
+                    type: Array
+                },
+            },
+            data() {
+                return {
+                    name: '',
+                    inn: '',
+                }
+            },
+            methods: {
+                addCompany() {
+                    this.companies.push({
+                        name: this.name,
+                        inn: this.inn,
+                    });
+
+                    this.name = '';
+                    this.inn = ''
+
+                    // чтобы увидеть, что метод created действительно вызывается при событии
+                    console.log('created');
+                }
+            },
+        });
+
+        // root Vue 
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                titles: [{
+                    id: '№',
+                    name: 'Название',
+                    inn: 'ИНН',
+                }, ],
+                companies: [{
+                        name: 'Google',
+                        inn: '13',
+                    },
+                    {
+                        name: 'Yandex',
+                        inn: '37',
+                    },
+                    {
+                        name: 'Ozon',
+                        inn: '71',
+                    },
+                ],
+            },
+            created() {
+                this.addCompany;
+            }
+        })
+    </script>
+</body>
+
+</html>

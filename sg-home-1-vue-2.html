@@ -1,0 +1,120 @@
+<!-- Создание динамических компонентов + props -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home 1</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <!-- CDN -->
+    <script src="https://unpkg.com/vue"></script>
+
+    <style>
+        .container {
+            margin: 0 auto;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 
+
+    Задача
+
+    Создать компонент "myform".
+    
+    Отобразить динамический компонент - использовать тег component.
+
+    Сделать обработчик события при нажатии на кнопку внутри формы.
+
+    При нажатии передать объект в родительский компонент (передать данные от дочки к родителю с помощью механизма событий).
+
+    -->
+
+    <div id="app" class="container">
+
+        <component @childevent="onChildEvent" :is="currentView" :data="countProps"></component>
+
+    </div>
+
+    <template id="myInfoTemplate">
+        <div>
+            <h3>{{title}}</h3>
+            <p>{{addInfo}}</p>
+        </div>
+    </template>
+
+    <template id="myFormTemplate">
+        <div>
+            <h3>{{title}} {{data.spec}}</h3>
+            <button @click="showMyInfo" class="btn btn-danger">Click Me</button>
+        </div>
+    </template>
+
+    <script>
+        Vue.component('myinfo', {
+            template: '#myInfoTemplate',
+            props: ['data'],
+            data() {
+                return {
+                    title: 'And me!',
+                    addInfo: 'take a look at the console'
+                }
+            }
+        });
+
+        Vue.component('myform', {
+            template: '#myFormTemplate',
+            props: ['data'],
+            data() {
+                return {
+                    title: 'I`m a dynamic component!',
+                    test: 'Child Event Testing Invoked!'
+                }
+            },
+            methods: {
+                showMyInfo() {
+                    this.$emit('childevent', this.test);
+                },
+            }
+        });
+
+        let vm = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    currentView: 'myform',
+                }
+            },
+            methods: {
+                onChildEvent(param) {
+                    console.log(`Param: ${param}`);
+                    this.currentView = 'myinfo';
+
+                    console.log('created invoked');
+                },
+            },
+            computed: {
+                countProps() {
+                    let count = 1;
+                    return {
+                        spec: `With ${count} prop.`
+                    };
+                }
+            },
+            created() {
+                this.onChildEvent;
+            }
+        });
+    </script>
+</body>
+
+</html>

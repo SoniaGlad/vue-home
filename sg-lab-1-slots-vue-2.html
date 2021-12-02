@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 1</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <!-- CDN -->
+    <script src="https://unpkg.com/vue"></script>
+
+    <style>
+        .container {
+            max-width: 600px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        h1,
+        main {
+            padding: 15px;
+        }
+
+        h1 {
+            background: hotpink;
+        }
+
+        main {
+            background: lightgreen;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 
+
+    Задача
+
+    Создать компонент информер (myinformer).
+
+    Определить два именнованных слота для данного 
+    компонента для вставки названия и содержимого в шаблон 
+    данного компонента.
+
+    Передать html-контент для каждого из именнованных слотов 
+    компонентов.
+
+    Для передачи контента использовать данные из модели данных
+    с использованием корневого элемента Vue.
+    
+    -->
+
+    <div id="app" class="container">
+
+        <myinformer>
+
+            <template #main-title>
+                {{mainTitle}}
+            </template>
+
+            <template #main-content>
+                {{mainContent}}
+            </template>
+
+        </myinformer>
+
+    </div>
+
+    <template id="myInformerTemplate">
+        <div>
+
+            <h1>
+                <slot name="main-title">Default for h1</slot>
+            </h1>
+
+            <main>
+                <h4>
+                    <slot name="main-content">Default for main</slot>
+                </h4>
+
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus perferendis debitis veritatis unde
+                    nulla autem id nisi porro aut. Quod minima asperiores molestiae, quam consequuntur temporibus
+                    corporis impedit praesentium ea.</p>
+            </main>
+
+        </div>
+    </template>
+
+    <script>
+        Vue.component('myinformer', {
+            template: '#myInformerTemplate'
+        });
+
+        let vm = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    mainTitle: 'I`m Main Title',
+                    mainContent: 'I`m Main Content',
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

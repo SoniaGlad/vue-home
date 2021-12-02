@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 3</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <!-- CDN -->
+    <script src="https://unpkg.com/vue"></script>
+
+    <style>
+        .container {
+            max-width: 500px;
+            text-align: center;
+        }
+
+        pre {
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 
+
+        Задача
+
+        Создать два компонента: 
+
+        1) myform 
+        - использует св-ва: name, lastName 
+
+        2) myformdetail 
+        - использует св-ва: name, lastName, email, age 
+
+        Определить объект-примесь для исключения дублирования кода в данных компонентах.
+
+        Использовать данную примесь для экземпляров myform и myformdetail.
+
+        Проверить что каждый экземпляр обладает своим состоянием (т.е. сделать метод или инпут для ввода инфо, чтобы увидеть, что у каждого компонента есть свое состояние).
+    
+    -->
+
+    <!-- https://vuejs.org/v2/guide/mixins.html -->
+
+    <!-- name, lastName - это общие свойства, поэтому их и выносим в mixin -->
+
+    <div id="app" class="container">
+        <h2>Mixins</h2>
+        <p>{{message}}</p>
+        <myform></myform>
+        <myformdetail></myformdetail>
+    </div>
+
+    <template id="myFormTemplate">
+        <div>
+            <h3>I'm a component `myform`</h3>
+            <pre>{{$data}}</pre>
+        </div>
+    </template>
+
+    <template id="myFormDetail">
+        <div>
+            <h3>I'm a component `myformdetail`</h3>
+            <pre>{{$data}}</pre>
+        </div>
+    </template>
+
+    <script>
+        // Примеси 
+        let mixin = {
+            data() {
+                return {
+                    name: 'Sofya',
+                    lastName: 'Gladkikh',
+                }
+            },
+        }
+
+        Vue.component('myform', {
+            template: '#myFormTemplate',
+            data() {
+                return {
+
+                }
+            },
+            mixins: [mixin],
+            methods: {
+                showData_1() {
+                    console.log('Created for Component 1 invoked!');
+                    console.log(`Компонент 1 - у меня есть Имя и Фамилия: ${this.name} ${this.lastName}`);
+                }
+            },
+            created() {
+                this.showData_1();
+            },
+        });
+
+        Vue.component('myformdetail', {
+            template: '#myFormDetail',
+            data() {
+                return {
+                    email: 'sg@soniaglad.com',
+                    age: 'Always 18'
+                }
+            },
+            mixins: [mixin],
+            methods: {
+                showData_2() {
+                    console.log('Created for Component 2 invoked!');
+                    console.log(
+                        `Компонент 2 - у меня тоже есть Имя и Фамилия помимо почты и возраста: ${this.name} ${this.lastName}, ${this.email}, ${this.age}`
+                        );
+                }
+            },
+            created() {
+                this.showData_2();
+            },
+        });
+
+        let vm = new Vue({
+            el: '#app',
+            mixins: [mixin],
+            data() {
+                return {
+                    property: 'Vue Root Property',
+                    message: 'Консоль и Vue Tools - мои лучшие друзья!'
+                }
+            },
+            methods: {
+                showData_3() {
+                    console.log('Created for Vue Root Element invoked!');
+                    console.log(`Корневой Экземпляр Vue - и у меня есть Имя и Фамилия и еще свое свойство: ${this.name} ${this.lastName}, ${this.property}`);
+                }
+            },
+            created() {
+                this.showData_3();
+            },
+        });
+    </script>
+</body>
+
+</html>

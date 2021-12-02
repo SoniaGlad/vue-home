@@ -1,0 +1,124 @@
+<!-- Vue Router -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue Router</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <!-- CDN -->
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+
+    <style>
+        .container {
+            max-width: 500px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 
+
+    Задача
+
+    1) Создать новый компонент - Contact 
+    2) Добавить маршрут в таблицу маршрутизации 
+    3) Добавить возможность перехода на данный компонет по ссылке
+
+    -->
+
+    <div id="app" class="container">
+
+        <home></home>
+
+        <ul class="nav">
+            <li class="nav-item">
+                <!-- Используем компонент router-link для навигации -->
+                <!-- Входной параметр 'to' определяет URL для перехода -->
+                <router-link to="/about" class="nav-link">About</router-link>
+            </li>
+            <li class="nav-item">
+                <router-link to="/projects" class="nav-link">Projects</router-link>
+            </li>
+            <li class="nav-item">
+                <router-link to="/contact" class="nav-link">Contacts</router-link>
+            </li>
+        </ul>
+
+        <!-- Отображаем компонент, для которого совпадает маршрут -->
+        <router-view></router-view>
+    </div>
+
+    <template id="homePage">
+        <h1>Welcome to Our Home Page</h1>
+    </template>
+
+    <template id="projectsTemplate">
+        <div>
+            <h3>Our Projects</h3>
+        </div>
+    </template>
+
+    <script>
+        // компонеты 
+        const Home = {
+            template: '#homePage'
+        }
+        const About = {
+            template: '<h3>About Page</h3>'
+        }
+        const Projects = {
+            template: '#projectsTemplate'
+        }
+        const Contact = {
+            template: '<h3>Our Contacts</h3>'
+        }
+        // Регистрация компонентов - она в данном примере не нужна - но в любом случае надо регестрировать, т.к. мы можем захотеть использовать их (компоненты) без Vue Router, например, см. стр. 37
+        Vue.component('home', Home);
+        Vue.component('about', About);
+        Vue.component('projects', Projects);
+        Vue.component('contact', Contact);
+
+        // Массив маршрутов (путь и соответствующий ему компонент)
+        const routes = [{
+                path: '/',
+                component: Home
+            },
+            {
+                path: '/about',
+                component: About
+            },
+            {
+                path: '/projects',
+                component: Projects
+            },
+            {
+                path: '/contact',
+                component: Contact
+            }
+        ]
+        // Создаем экземпляр VueRouter (используем массив маршрутов)
+        const router = new VueRouter({
+            mode: 'history',
+            routes: routes
+        });
+
+        // Указываем маршрутизатор для корневого экземляра Vue
+        let vm = new Vue({
+            el: '#app',
+            // Используем опцию router!!!
+            router: router,
+            data() {
+                return {}
+            }
+        });
+    </script>
+</body>
+
+</html>

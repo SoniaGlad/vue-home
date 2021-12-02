@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+    <title>Home 2</title>
+
+    <!-- Required Stylesheets -->
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css" />
+
+    <!-- Load polyfills to support older browsers -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver"></script>
+
+    <!-- Required scripts -->
+    <script src="https://unpkg.com/vue@latest/dist/vue.js"></script>
+    <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <style>
+        tbody tr {
+            cursor: pointer;
+        }
+
+        .m-0 {
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 
+  
+    Задача
+
+    Использовать слоты компонентов BootstrapVue: Table, Modаl
+
+    https://bootstrap-vue.org/docs/components/table
+    https://bootstrap-vue.org/docs/components/modal
+
+    1) Для компонента Table установить именованный слот: #table-caption  
+    2) Для компонента Model установить именованный слот: #modal-footer 
+
+    -->
+
+    <div id="app" class="container">
+
+        <b-table hover :items="items" :fields="fields" @row-clicked="getThisRowData" class="my-table" caption-top>
+            <template #table-caption>
+                {{todoTitle}}
+            </template>
+        </b-table>
+
+
+        <b-modal id="my-modal">
+            <div>
+                <pre class="m-0">Current Item: {{objItem}}</pre>
+            </div>
+            <template #modal-footer>
+                {{modalFooter}}
+            </template>
+        </b-modal>
+
+    </div>
+
+    <!-- Start running your app -->
+    <script>
+        window.app = new Vue({
+            el: '#app',
+            data: {
+                serverURL: 'https://jsonplaceholder.typicode.com/todos',
+                objItem: '',
+                todoTitle: 'Todo List',
+                modalFooter: 'I`m Modal Footer',
+                fields: [{
+                        key: 'userId',
+                        label: 'User ID',
+                    },
+                    {
+                        key: 'id',
+                        label: 'ID',
+                    },
+                    {
+                        key: 'title',
+                        label: 'Title',
+                        variant: 'success'
+                    },
+                    {
+                        key: 'completed',
+                        label: 'Completed',
+                    }
+                ],
+                items: [],
+            },
+            methods: {
+                getAllData() {
+                    let self = this;
+                    axios.get(this.serverURL).then(response => {
+                        console.log('STATUS: ' + response.status);
+
+                        if (response.status == 200) {
+                            self.items = response.data;
+                        }
+                    }).catch(error => {
+                        if (error.response) {
+                            console.log('ERR_STATUS: ' + error.response.status);
+                        } else if (error.request) {
+                            console.log(error.request);
+                        } else {
+                            console.log('Error:', error.message);
+                        }
+                    });
+
+                    console.log('created all data');
+                },
+                showMe() {
+                    this.$bvModal.show('my-modal');
+                },
+                getThisRowData(item, index) {
+                    console.log(item);
+                    console.log(index);
+
+                    // присвоила objItem (где будет вывод) значение текущего item
+                    this.objItem = item;
+                    this.showMe();
+                }
+            },
+            created() {
+                this.getAllData();
+            }
+        })
+    </script>
+</body>
+
+</html>

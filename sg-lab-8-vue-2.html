@@ -1,0 +1,133 @@
+<!-- Геттеры и действия -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 8</title>
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://unpkg.com/vuex"></script>
+</head>
+
+<body>
+
+    <!-- 
+
+    Задача
+
+    Добавить мутацию и действие для изменения свойства message. 
+
+    Вызвать действие и вывести значение состояния message 
+    после изменения. 
+
+    -->
+
+
+    <div id="app">
+        {{ count }} <button @click="increment">Increment</button>
+        MESSAGE: {{mess}}
+        <button @click="messageAction">Click to Change Message</button>
+    </div>
+
+    <script>
+        function state() {
+            return {
+                count: 0,
+                message: 'rrrrrr'
+            }
+        }
+        // способом изменения состояния хранилища
+        const mutations = {
+            INCREMENT(state) {
+                state.count++
+            },
+            // мутация с нагрузкой, value - нагрузка
+            INCREMENT2(state, value) {
+                state.count += value.payload;
+            },
+            MESSAGE(state) {
+                state.message = 'Message has been changed!';
+            }
+        }
+        // централизованное хранилище
+        const store = new Vuex.Store({
+            // состояние 
+            state,
+            // действия (действия инициируют мутации)
+            actions: {
+                changeCount(context) {
+                    // context - объект контекста
+                    // используем commit для инициирования мутации
+                    context.commit('INCREMENT');
+                },
+                changeCount2(context) {
+                    context.commit('INCREMENT');
+                },
+                changeMessage(context) {
+                    context.commit('MESSAGE');
+                },
+            },
+            // мутации
+            mutations,
+            // геттеры 
+            getters: {
+                upperMessage(state) {
+                    return state.message.toUpperCase();
+                },
+                lowerMessage: state => {
+                    return state.message.toLowerCase();
+                }
+            }
+        })
+        // Vue 
+        const vm = new Vue({
+            el: '#app',
+            // централизованное хранилище
+            store,
+            computed: {
+                count() {
+                    // this.$store - хранилище 
+                    return this.$store.state.count
+                },
+                mess() {
+                    // this.$store - хранилище 
+                    //return this.$store.state.message
+                    // используем getters
+                    // return this.$store.getters.upperMessage;
+                    return this.$store.state.message;
+                },
+                /* myMessage() {
+                    return this.$store.state.message;
+                } */
+            },
+            methods: {
+                increment() {
+                    // обработка мутации - вызывается метод commit
+                    this.$store.commit('INCREMENT')
+
+                    //this.$store.commit('INCREMENT2', 10);
+                    // объектный синтаксис 
+                    this.$store.commit({
+                        type: "INCREMENT2",
+                        payload: 10
+                    });
+                },
+                incrementAction() {
+                    //Действия запускаются методом store.dispatch
+                    // this.$store.dispatch('changeCount', "some VALUE!!!!");
+                    this.$store.dispatch('changeCount', {
+                        payload: 10
+                    });
+                },
+                messageAction() {
+                    this.$store.dispatch('changeMessage');
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

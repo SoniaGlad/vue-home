@@ -1,0 +1,138 @@
+<!-- Дополнительная работа с router - Именованные маршруты -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home 4</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <!-- CDN -->
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+
+    <style>
+        .container {
+            max-width: 450px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 
+
+    Задача
+
+    Создать компонент ProductList - который отображает список продуктов 
+    на основе массива продуктов (id, name - свойства продукта).
+
+    При клике на позицию списка - выполнить переход на компонент ProductCard используя динамический параметр id.
+
+    Вывести идентификатор продукта в компоненте ProductCard.
+
+    /product/1 
+    /product/2
+
+    -->
+
+    <div id="app" class="container">
+
+        <products></products>
+
+        <router-view></router-view>
+    </div>
+
+    <template id="productListTemplate">
+        <div>
+            <h1>Welcome to Our Shop!</h1>
+
+            <ul class="nav">
+                <li class="nav-item" v-for="product in products">
+                    <router-link :to="getRout(product)" class="nav-link">{{product.name}}</router-link>
+                </li>
+            </ul>
+
+        </div>
+    </template>
+
+    <template id="card">
+        <div>
+            <h4>Product Title</h4>
+            <p>My ID is: {{$route.params.id}}</p>
+        </div>
+    </template>
+
+    <script>
+        const ProductList = {
+            template: '#productListTemplate',
+            data() {
+                return {
+                    products: [{
+                            id: 1,
+                            name: 'Violet',
+                        },
+                        {
+                            id: 2,
+                            name: 'Lightgreen',
+                        },
+                        {
+                            id: 3,
+                            name: 'Yellow',
+                        },
+                        {
+                            id: 4,
+                            name: 'Lightblue',
+                        },
+                    ],
+                }
+            },
+            methods: {
+                getRout(product) {
+                    return '/product/' + product.id;
+                }
+            }
+        };
+
+        const ProductCard = {
+            template: '#card'
+        };
+
+        Vue.component('products', ProductList);
+        Vue.component('card', ProductCard);
+
+        const routes = [
+            {
+                path: '/',
+                component: ProductList
+            },
+            {
+                path: '/product/:id',
+                component: ProductCard
+            },
+        ]
+
+        const router = new VueRouter({
+            mode: 'history',
+            routes: routes
+        });
+
+        const vm = new Vue({
+            el: '#app',
+            router: router,
+            data() {
+                return {
+
+                }
+            },
+            methods: {
+
+            }
+        });
+    </script>
+</body>
+
+</html>
